@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AthleteAddaTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Newsfeed">
+    <Key>
+      <PropertyRef Name="NewsFeed_Id" />
+    </Key>
+    <Property Name="NewsFeed_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Datetime" Type="datetime" />
+    <Property Name="Publisher_Id" Type="int" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="Image_Path" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsPublished" Type="bit" />
+    <Property Name="IsDeleted" Type="bit" />
+    <Property Name="IsVerified" Type="bit" />
+    <Property Name="Comment_by_Reviewer" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="Publisher_Id" />
+    </Key>
+    <Property Name="Publisher_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Publisher_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email_Id" Type="nvarchar" MaxLength="100" />
+    <Property Name="Mobile_No" Type="nvarchar" MaxLength="15" />
+    <Property Name="Display_Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Display_Picture" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityContainer Name="AthleteAddaTestModelStoreContainer">
+    <EntitySet Name="Newsfeed" EntityType="Self.Newsfeed" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AthleteAddaTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Newsfeed">
+    <Key>
+      <PropertyRef Name="NewsFeed_Id" />
+    </Key>
+    <Property Name="NewsFeed_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Datetime" Type="DateTime" Precision="3" />
+    <Property Name="Publisher_Id" Type="Int32" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image_Path" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsPublished" Type="Boolean" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <Property Name="IsVerified" Type="Boolean" />
+    <Property Name="Comment_by_Reviewer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="Publisher_Id" />
+    </Key>
+    <Property Name="Publisher_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Publisher_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email_Id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile_No" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="Display_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Display_Picture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="AthleteAddaTestEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Newsfeeds" EntityType="Self.Newsfeed" />
+    <EntitySet Name="Publishers" EntityType="Self.Publisher" />
+  </EntityContainer>
+</Schema>
