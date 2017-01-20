@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AthleteAddaTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AthleteAddaTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Newsfeed">
           <Key>
             <PropertyRef Name="NewsFeed_Id" />
@@ -30,12 +30,18 @@
           <Property Name="Display_Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Display_Picture" Type="nvarchar(max)" />
         </EntityType>
+        <Function Name="GetNewfeeds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SearchDateTime" Type="datetime" Mode="In" />
+          <Parameter Name="SearchText" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortBy" Type="int" Mode="In" />
+          <Parameter Name="NewsfeedCountFrom" Type="int" Mode="In" />
+          <Parameter Name="GetTotalNewsfeeds" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="AthleteAddaTestModelStoreContainer">
           <EntitySet Name="Newsfeed" EntityType="Self.Newsfeed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AthleteAddaTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -67,7 +73,25 @@
         <EntityContainer Name="AthleteAddaTestEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Newsfeeds" EntityType="Self.Newsfeed" />
           <EntitySet Name="Publishers" EntityType="Self.Publisher" />
+          <FunctionImport Name="GetNewfeeds" ReturnType="Collection(AthleteAddaTestModel.GetNewfeeds_Result)">
+            <Parameter Name="SearchDateTime" Mode="In" Type="DateTime" />
+            <Parameter Name="SearchText" Mode="In" Type="String" />
+            <Parameter Name="SortBy" Mode="In" Type="Int32" />
+            <Parameter Name="NewsfeedCountFrom" Mode="In" Type="Int32" />
+            <Parameter Name="GetTotalNewsfeeds" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="GetNewfeeds_Result">
+          <Property Type="Int32" Name="NewsFeed_Id" Nullable="false" />
+          <Property Type="DateTime" Name="Datetime" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Publisher_Id" Nullable="true" />
+          <Property Type="String" Name="Content" Nullable="true" />
+          <Property Type="String" Name="Image_Path" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="IsPublished" Nullable="true" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
+          <Property Type="Boolean" Name="IsVerified" Nullable="true" />
+          <Property Type="String" Name="Comment_by_Reviewer" Nullable="true" MaxLength="200" />
+          </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -101,6 +125,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetNewfeeds" FunctionName="AthleteAddaTestModel.Store.GetNewfeeds">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AthleteAddaTestModel.GetNewfeeds_Result">
+                <ScalarProperty Name="NewsFeed_Id" ColumnName="NewsFeed_Id" />
+                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+                <ScalarProperty Name="Publisher_Id" ColumnName="Publisher_Id" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+                <ScalarProperty Name="Comment_by_Reviewer" ColumnName="Comment_by_Reviewer" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -25,6 +25,13 @@
     <Property Name="Display_Name" Type="nvarchar" MaxLength="50" />
     <Property Name="Display_Picture" Type="nvarchar(max)" />
   </EntityType>
+  <Function Name="GetNewfeeds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="SearchText" Type="nvarchar" Mode="In" />
+    <Parameter Name="SortBy" Type="int" Mode="In" />
+    <Parameter Name="NewsfeedCountFrom" Type="int" Mode="In" />
+    <Parameter Name="GetTotalNewsfeeds" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="AthleteAddaTestModelStoreContainer">
     <EntitySet Name="Newsfeed" EntityType="Self.Newsfeed" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />

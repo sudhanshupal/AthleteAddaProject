@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -29,3 +30,25 @@
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+<div>
+    <table id="tbPerson"></table>
+</div>
+@section Scripts
+{
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://localhost:49312/api/Newsfeed",
+            type: "Get",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("<tr><td>" + data[i].Content + "</td></tr>").appendTo("#tbPerson");
+                }
+            },
+            error: function (msg) { alert(msg); }
+        });
+    });
+    </script>
+}
+
+

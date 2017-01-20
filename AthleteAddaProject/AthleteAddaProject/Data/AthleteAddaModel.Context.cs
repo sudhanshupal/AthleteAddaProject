@@ -12,6 +12,8 @@ namespace AthleteAddaProject.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class AthleteAddaTestEntities : DbContext
     {
@@ -27,5 +29,30 @@ namespace AthleteAddaProject.Data
     
         public virtual DbSet<Newsfeed> Newsfeeds { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
+    
+        public virtual ObjectResult<GetNewfeeds_Result> GetNewfeeds(Nullable<System.DateTime> searchDateTime, string searchText, Nullable<int> sortBy, Nullable<int> newsfeedCountFrom, Nullable<int> getTotalNewsfeeds)
+        {
+            var searchDateTimeParameter = searchDateTime.HasValue ?
+                new ObjectParameter("SearchDateTime", searchDateTime) :
+                new ObjectParameter("SearchDateTime", typeof(System.DateTime));
+    
+            var searchTextParameter = searchText != null ?
+                new ObjectParameter("SearchText", searchText) :
+                new ObjectParameter("SearchText", typeof(string));
+    
+            var sortByParameter = sortBy.HasValue ?
+                new ObjectParameter("SortBy", sortBy) :
+                new ObjectParameter("SortBy", typeof(int));
+    
+            var newsfeedCountFromParameter = newsfeedCountFrom.HasValue ?
+                new ObjectParameter("NewsfeedCountFrom", newsfeedCountFrom) :
+                new ObjectParameter("NewsfeedCountFrom", typeof(int));
+    
+            var getTotalNewsfeedsParameter = getTotalNewsfeeds.HasValue ?
+                new ObjectParameter("GetTotalNewsfeeds", getTotalNewsfeeds) :
+                new ObjectParameter("GetTotalNewsfeeds", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNewfeeds_Result>("GetNewfeeds", searchDateTimeParameter, searchTextParameter, sortByParameter, newsfeedCountFromParameter, getTotalNewsfeedsParameter);
+        }
     }
 }

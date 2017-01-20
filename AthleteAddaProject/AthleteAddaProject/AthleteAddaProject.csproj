@@ -176,6 +176,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NewsfeedController.cs" />
     <Compile Include="Data\AthleteAddaModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -191,6 +192,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AthleteAddaModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Data\GetNewfeeds_Result.cs">
+      <DependentUpon>AthleteAddaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\Newsfeed.cs">
       <DependentUpon>AthleteAddaModel.tt</DependentUpon>
     </Compile>
@@ -201,6 +205,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GetNewfeeds.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\NewsfeedModel.cs" />

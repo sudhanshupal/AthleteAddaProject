@@ -28,5 +28,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetNewfeeds" FunctionName="AthleteAddaTestModel.Store.GetNewfeeds">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="AthleteAddaTestModel.GetNewfeeds_Result">
+          <ScalarProperty Name="NewsFeed_Id" ColumnName="NewsFeed_Id" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+          <ScalarProperty Name="Publisher_Id" ColumnName="Publisher_Id" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
+          <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
+          <ScalarProperty Name="Comment_by_Reviewer" ColumnName="Comment_by_Reviewer" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

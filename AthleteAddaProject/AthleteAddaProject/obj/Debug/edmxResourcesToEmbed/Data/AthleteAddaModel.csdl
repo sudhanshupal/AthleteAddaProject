@@ -28,5 +28,23 @@
   <EntityContainer Name="AthleteAddaTestEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Newsfeeds" EntityType="Self.Newsfeed" />
     <EntitySet Name="Publishers" EntityType="Self.Publisher" />
+    <FunctionImport Name="GetNewfeeds" ReturnType="Collection(AthleteAddaTestModel.GetNewfeeds_Result)">
+      <Parameter Name="SearchDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="SearchText" Mode="In" Type="String" />
+      <Parameter Name="SortBy" Mode="In" Type="Int32" />
+      <Parameter Name="NewsfeedCountFrom" Mode="In" Type="Int32" />
+      <Parameter Name="GetTotalNewsfeeds" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
+  <ComplexType Name="GetNewfeeds_Result">
+    <Property Type="Int32" Name="NewsFeed_Id" Nullable="false" />
+    <Property Type="DateTime" Name="Datetime" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="Publisher_Id" Nullable="true" />
+    <Property Type="String" Name="Content" Nullable="true" />
+    <Property Type="String" Name="Image_Path" Nullable="true" MaxLength="100" />
+    <Property Type="Boolean" Name="IsPublished" Nullable="true" />
+    <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
+    <Property Type="Boolean" Name="IsVerified" Nullable="true" />
+    <Property Type="String" Name="Comment_by_Reviewer" Nullable="true" MaxLength="200" />
+  </ComplexType>
 </Schema>
