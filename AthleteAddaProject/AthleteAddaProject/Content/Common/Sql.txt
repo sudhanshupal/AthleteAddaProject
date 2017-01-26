@@ -1,0 +1,63 @@
+﻿USE [AthleteAddaTest]
+GO
+/****** Object:  StoredProcedure [dbo].[GetNewfeeds]    Script Date: 26/01/2017 11:57:55 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetNewfeeds] 
+@SearchDateTime datetime,
+@SearchText nvarchar(100),
+@SortBy int,
+@NewsfeedCountFrom int,
+@GetTotalNewsfeeds int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	if (@NewsfeedCountFrom = 0) 
+	begin
+		select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+			n.Comment_by_Reviewer, p.Display_Name , n.Title
+		from Newsfeed n, Publisher p
+		where n.Publisher_Id = p.Publisher_Id
+		and n.IsDeleted = 0	
+		and n.IsVerified = 1
+		and n.IsVerified = 1
+			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+	end
+	else
+	begin
+		declare @condition nvarchar(300)
+
+		if (@SearchText = '')
+		begin
+			select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+			n.Comment_by_Reviewer, p.Display_Name, n.Title
+			from Newsfeed n, Publisher p
+			where n.Publisher_Id = p.Publisher_Id
+			and n.IsDeleted = 0	
+			and n.IsVerified = 1
+			and n.IsVerified = 1
+			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+			Order by n.Datetime desc
+			OFFSET @NewsfeedCountFrom ROWS
+			FETCH NEXT @GetTotalNewsfeeds ROWS ONLY		 
+		end
+		else
+		begin
+			select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+			n.Comment_by_Reviewer, p.Display_Name, n.Title
+			from Newsfeed n, Publisher p
+			where n.Publisher_Id = p.Publisher_Id
+			and n.IsDeleted = 0	
+			and n.IsVerified = 1
+			and n.IsVerified = 1
+			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+			and n.Content like '%'+@SearchText+'%'
+			Order by n.Datetime desc
+			OFFSET @NewsfeedCountFrom ROWS
+			FETCH NEXT @GetTotalNewsfeeds ROWS ONLY
+		end
+
+	end
+END

@@ -16,5 +16,8 @@ namespace AthleteAddaProject.Models
         public bool IsDeleted { get; set; }
         public bool IsVarified { get; set; }
         public string CommentByReviewer { get; set; }
+        public string PublisherDisplayName { get; set; }
+        public string Title { get; set; }
+        public int NewsfeedCountFrom { get; set; }
     }
 }

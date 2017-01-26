@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Newsfeeds">
       <EntityTypeMapping TypeName="AthleteAddaTestModel.Newsfeed">
         <MappingFragment StoreEntitySet="Newsfeed">
+          <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="NewsFeed_Id" ColumnName="NewsFeed_Id" />
           <ScalarProperty Name="Datetime" ColumnName="Datetime" />
           <ScalarProperty Name="Publisher_Id" ColumnName="Publisher_Id" />
@@ -40,6 +41,8 @@
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
           <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
           <ScalarProperty Name="Comment_by_Reviewer" ColumnName="Comment_by_Reviewer" />
+          <ScalarProperty Name="Display_Name" ColumnName="Display_Name" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>

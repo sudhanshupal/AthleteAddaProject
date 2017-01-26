@@ -18,6 +18,7 @@
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="IsVerified" Type="bit" />
           <Property Name="Comment_by_Reviewer" Type="nvarchar" MaxLength="200" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Publisher">
           <Key>
@@ -58,6 +59,7 @@
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="IsVerified" Type="Boolean" />
           <Property Name="Comment_by_Reviewer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Publisher">
           <Key>
@@ -91,6 +93,8 @@
           <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
           <Property Type="Boolean" Name="IsVerified" Nullable="true" />
           <Property Type="String" Name="Comment_by_Reviewer" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Display_Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="500" />
           </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -101,6 +105,7 @@
           <EntitySetMapping Name="Newsfeeds">
             <EntityTypeMapping TypeName="AthleteAddaTestModel.Newsfeed">
               <MappingFragment StoreEntitySet="Newsfeed">
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="NewsFeed_Id" ColumnName="NewsFeed_Id" />
                 <ScalarProperty Name="Datetime" ColumnName="Datetime" />
                 <ScalarProperty Name="Publisher_Id" ColumnName="Publisher_Id" />
@@ -137,6 +142,8 @@
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="IsVerified" ColumnName="IsVerified" />
                 <ScalarProperty Name="Comment_by_Reviewer" ColumnName="Comment_by_Reviewer" />
+                <ScalarProperty Name="Display_Name" ColumnName="Display_Name" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

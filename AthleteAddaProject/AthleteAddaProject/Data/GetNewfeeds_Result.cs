@@ -22,5 +22,7 @@ namespace AthleteAddaProject.Data
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<bool> IsVerified { get; set; }
         public string Comment_by_Reviewer { get; set; }
+        public string Display_Name { get; set; }
+        public string Title { get; set; }
     }
 }

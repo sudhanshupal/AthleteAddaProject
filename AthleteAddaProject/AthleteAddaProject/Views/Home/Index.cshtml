@@ -1,53 +1,122 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
-
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
 <div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+<div class="row" id="NewsTable">
+
 </div>
-<div>
-    <table id="tbPerson"></table>
-</div>
+<a class="btn btn-default btnPrevious">Previous</a><a class="btn btn-default btnNext">Next</a> 
 @section Scripts
 {
-<script>
-    $(document).ready(function () {
-        $.ajax({
-            url: "http://localhost:49312/api/Newsfeed",
-            type: "Get",
-            success: function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    $("<tr><td>" + data[i].Content + "</td></tr>").appendTo("#tbPerson");
-                }
-            },
-            error: function (msg) { alert(msg); }
+    <script>
+        var newsfeedCountFrom = 0;
+        $(document).ready(function () {
+            //initialize
+            GetData(newsfeedCountFrom);
+            CheckNewsFeedCount();
         });
-    });
+
+        $('.btnPrevious').click(function () {
+            newsfeedCountFrom = parseInt(parseInt(newsfeedCountFrom) - 3);
+            GetData(newsfeedCountFrom);
+            CheckNewsFeedCount();
+        });
+
+        $('.btnNext').click(function () {
+            newsfeedCountFrom = parseInt(parseInt(newsfeedCountFrom) + 3);
+            GetData(newsfeedCountFrom);
+            CheckNewsFeedCount();
+        });
+
+        function CheckNewsFeedCount()
+        {
+            if (newsfeedCountFrom == 0) {
+                $('.btnPrevious').addClass('disabled');
+            }
+            else {
+                $('.btnPrevious').removeClass('disabled');
+            }
+        }
+
+        function EnableNextButton() {
+            $('.btnNext').removeClass('disabled');
+        }
+
+        function DisableNextButton()
+        {
+            $('.btnNext').addClass('disabled');
+        }
+
+        function GetData(newsfeedCountFrom)
+        {
+            //todo:add calender control to select date
+            //get current date
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+
+            var output = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day;
+
+
+            $.ajax({
+                url: "http://localhost:49312/api/Newsfeed?datetimeStr=" + output.toString() + "&searchStr=" + '' + "&newsfeedCountFrom=" + newsfeedCountFrom,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //add data to div if data available
+                    if (data.length > 0)
+                    {
+                        //if data is available then enable next button
+                        EnableNextButton();
+                        //empty the previous data 
+                        $("#NewsTable").empty();
+
+                        //add data to div
+                        for (var i = 0; i < data.length; i++) {
+                            //get latest NewsfeedCountFrom
+                            newsfeedCountFrom = data[i].NewsfeedCountFrom;
+                            //print data
+                            $("<div class='col-md-12 well' >"
+                                + "<div class='media'>"
+                                + "<a class='pull-left' href='#'>"
+                                + "<img class='media-object' src='" + data[i].ImagePath + "'>"
+                                + "</a>"
+                                + "<div class='media-body'>"
+                                + "<h4 class='media-heading'>" + data[i].Title + "</h4>"
+                                + "<p class='text-right'>By " + data[i].PublisherDisplayName + "</p>"
+                                + "<p>" + data[i].Content + "</p>"
+                                + "<ul class='list-inline list-unstyled'>"
+                                + "<li><span><i class='glyphicon glyphicon-calendar'></i> " + data[i].DateTime + "</span></li>"
+                                + "<li>"
+                                + "<span><i class='fa fa-facebook-square'></i> </span>"
+                                + "<span><i class='fa fa-twitter-square'></i> </span>"
+                                + "<span><i class='fa fa-google-plus-square'></i> </span>"
+                                + "</li>"
+                                + "</ul>"
+                                + "</div>"
+                                + "</div>"
+                                + "</div>").appendTo("#NewsTable");
+                        }
+                        //check previous button enable/disable
+                        CheckNewsFeedCount();
+                    }
+                    else {
+                        //if no data available then disable the next button
+                        DisableNextButton();
+                    }
+                },
+                error: function (msg) { alert(msg); }
+            });
+        }
     </script>
 }
 

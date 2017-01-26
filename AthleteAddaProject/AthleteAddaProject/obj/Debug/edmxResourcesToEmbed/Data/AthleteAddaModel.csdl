@@ -13,6 +13,7 @@
     <Property Name="IsDeleted" Type="Boolean" />
     <Property Name="IsVerified" Type="Boolean" />
     <Property Name="Comment_by_Reviewer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Publisher">
     <Key>
@@ -46,5 +47,7 @@
     <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
     <Property Type="Boolean" Name="IsVerified" Nullable="true" />
     <Property Type="String" Name="Comment_by_Reviewer" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Display_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Title" Nullable="true" MaxLength="500" />
   </ComplexType>
 </Schema>

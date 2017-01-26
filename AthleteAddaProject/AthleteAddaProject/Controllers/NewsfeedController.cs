@@ -11,19 +11,28 @@ namespace AthleteAddaProject.Controllers
 {
     public class NewsfeedController : ApiController
     {
-
-        public List<NewsfeedModel> Get()//string datetimeStr, string searchStr, int newsfeedCountFrom
+        //[HttpPost]
+        //public List<NewsfeedModel> GetNews(string datetimeStr)//, string searchStr, int newsfeedCountFrom
+        //{
+        //    int newsfeedCountFrom = 0;
+        //    string searchStr = "";
+        //    DateTime datetime = DateTime.Now;
+        //    int sortBy = 0;
+        //    int getTotalNewsfeeds = 3;
+        //    NewsFeedService newsFeedService = new NewsFeedService();
+        //    List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds(datetime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds);
+        //    return newsfeeds;
+        //}
+        public IHttpActionResult Get(string datetimeStr, string searchStr, int newsfeedCountFrom)
         {
-            int newsfeedCountFrom = 0;
-            string searchStr = "";
-            DateTime datetime = DateTime.Now;
+            //newsfeedCountFrom = 6;
+            DateTime datetime = DateTime.Parse(datetimeStr);
             int sortBy = 0;
             int getTotalNewsfeeds = 3;
             NewsFeedService newsFeedService = new NewsFeedService();
             List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds(datetime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds);
-            return newsfeeds;
+            return Ok(newsfeeds);
         }
-
         // GET api/<controller>
         //public IEnumerable<string> Get()
         //{

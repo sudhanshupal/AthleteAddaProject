@@ -13,6 +13,7 @@
     <Property Name="IsDeleted" Type="bit" />
     <Property Name="IsVerified" Type="bit" />
     <Property Name="Comment_by_Reviewer" Type="nvarchar" MaxLength="200" />
+    <Property Name="Title" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Publisher">
     <Key>
