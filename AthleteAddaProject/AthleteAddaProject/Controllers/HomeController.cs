@@ -12,9 +12,12 @@ namespace AthleteAddaProject.Controllers
     {
         public ActionResult Index()
         {
-            NewsFeedService newsFeedService = new NewsFeedService();
-            List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds();
-            //todo:show data on page
+            return View();
+        }
+
+        public ActionResult AddNews()
+        {
+            ViewBag.Message = "Your application description page.";
 
             return View();
         }
@@ -25,6 +28,7 @@ namespace AthleteAddaProject.Controllers
 
             return View();
         }
+
 
         public ActionResult Contact()
         {
