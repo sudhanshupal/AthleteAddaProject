@@ -2,13 +2,44 @@
     ViewBag.Title = "Home Page";
 }
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="~/Content/date-picker/css/bootstrap-datepicker.min.css" />
+
 <div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
+
 @Html.AntiForgeryToken()
-//todo:add bootstrap calender control and one text field
+<div class="row" style="background-color:#a0d4fa; padding:5px; margin-bottom:10px;">
+    <div class="col-md-12 col-xs-12">
+        <div class="col-md-offset-6 col-md-2">
+                <input type="text" id="txtDateSearch" class="form-control" aria-describedby="basic-addon2">
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" id="txtKeywordSearch" class="form-control" aria-describedby="basic-addon1">
+                <span class="input-group-addon glyphicon glyphicon-search" id="basic-addon1" onclick="GetData();" style="cursor:pointer;"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col col-md-12 col-xs-12 text-center" id="errorMessage">
+    <div class='alert alert-danger alert-dismissable'>
+        <a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>
+        <span id="spanMessage"></span>
+    </div>
+</div>
+<div class='col col-md-12 col-xs-12 text-center' id="noResultFoundMessage">
+    <div class='alert alert-info alert-dismissable'>
+        <a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>
+        <span>No news found.</span>
+    </div>
+</div>
+
+
+
 <div class="row" id="NewsTable">
 
 </div>
@@ -18,21 +49,64 @@
     <script>
 
         var newsfeedCountFrom = 0;
+        
+
         $(document).ready(function () {
+            $('#txtDateSearch').bind("enterKey", function (e) {
+                GetData();
+            });
+
+            $('#txtDateSearch').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $(this).trigger("enterKey");
+                }
+            });
+            $('#txtKeywordSearch').bind("enterKey", function (e) {
+                GetData();
+            });
+
+            $('#txtKeywordSearch').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $(this).trigger("enterKey");
+                }
+            });
+
+            $('#txtDateSearch').datepicker({
+                format: "yyyy/mm/dd",
+                endDate: "today",
+                todayBtn: "linked",
+                clearBtn: true,
+                daysOfWeekHighlighted: "0",
+                autoclose: true,
+                todayHighlight: true
+            });
+            //get current date
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+
+            var output = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day;
+            if ($('#txtDateSearch').val() == '') {
+                $('#txtDateSearch').val(output);
+            }
+
             //initialize
-            GetData(newsfeedCountFrom);
+            GetData();
             CheckNewsFeedCount();
+
         });
 
         $('.btnPrevious').click(function () {
             newsfeedCountFrom = parseInt(parseInt(newsfeedCountFrom) - 3);
-            GetData(newsfeedCountFrom);
+            GetData();
             CheckNewsFeedCount();
         });
 
         $('.btnNext').click(function () {
             newsfeedCountFrom = parseInt(parseInt(newsfeedCountFrom) + 3);
-            GetData(newsfeedCountFrom);
+            GetData();
             CheckNewsFeedCount();
         });
 
@@ -59,22 +133,15 @@
             return $("input[name='__RequestVerificationToken']").val();
         }
 
-        function GetData(newsfeedCountFrom)
+        function GetData()
         {
-            //todo:add calender control to select date
-            //get current date
-            var d = new Date();
-            var month = d.getMonth() + 1;
-            var day = d.getDate();
-
-            var output = d.getFullYear() + '/' +
-                (month < 10 ? '0' : '') + month + '/' +
-                (day < 10 ? '0' : '') + day;
-
+            $('#errorMessage').hide();
+            $('#noResultFoundMessage').hide();
+            
             var token = getAntiForgeryToken();
     
             $.ajax({
-                url: "http://localhost:49312/api/Newsfeed?datetimeStr=" + output.toString() + "&searchStr=" + '' + "&newsfeedCountFrom=" + newsfeedCountFrom,
+                url: "http://localhost:49312/api/Newsfeed?datetimeStr=" + $('#txtDateSearch').val().toString() + "&searchStr=" + $('#txtKeywordSearch').val() + "&newsfeedCountFrom=" + newsfeedCountFrom,
                 type: "GET",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -116,18 +183,25 @@
                                 + "</div>"
                                 + "</div>").appendTo("#NewsTable");
                         }
+
                         //check previous button enable/disable
                         CheckNewsFeedCount();
                     }
                     else {
                         //if no data available then disable the next button
                         DisableNextButton();
+                        $('#noResultFoundMessage').show();
+
                     }
                 },
-                error: function (msg) { alert(msg); }
+                error: function (msg) {
+                    $('#spanMessage').text(msg);
+                    $('#errorMessage').show();
+                }
             });
         }
     </script>
+    <script src="~/Content/date-picker/js/bootstrap-datepicker.min.js"></script>
 }
 
 

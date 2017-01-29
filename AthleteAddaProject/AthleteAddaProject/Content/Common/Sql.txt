@@ -1,6 +1,6 @@
 ﻿USE [AthleteAddaTest]
 GO
-/****** Object:  StoredProcedure [dbo].[GetNewfeeds]    Script Date: 26/01/2017 11:57:55 AM ******/
+/****** Object:  StoredProcedure [dbo].[GetNewfeeds]    Script Date: 29/01/2017 10:46:03 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -16,6 +16,8 @@ BEGIN
 	SET NOCOUNT ON;
 	if (@NewsfeedCountFrom = 0) 
 	begin
+	if (@SearchText = '')
+		begin
 		select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
 			n.Comment_by_Reviewer, p.Display_Name , n.Title
 		from Newsfeed n, Publisher p
@@ -24,6 +26,19 @@ BEGIN
 		and n.IsVerified = 1
 		and n.IsVerified = 1
 			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+			end
+			else 
+			begin
+		select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+			n.Comment_by_Reviewer, p.Display_Name , n.Title
+		from Newsfeed n, Publisher p
+		where n.Publisher_Id = p.Publisher_Id
+		and n.IsDeleted = 0	
+		and n.IsVerified = 1
+		and n.IsVerified = 1
+			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+			and n.Content like '%'+@SearchText+'%'
+			end
 	end
 	else
 	begin
