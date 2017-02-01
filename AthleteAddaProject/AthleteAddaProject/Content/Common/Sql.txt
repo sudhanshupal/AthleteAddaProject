@@ -1,6 +1,6 @@
 ﻿USE [AthleteAddaTest]
 GO
-/****** Object:  StoredProcedure [dbo].[GetNewfeeds]    Script Date: 29/01/2017 10:46:03 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetNewfeeds]    Script Date: 01/02/2017 8:21:58 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -10,7 +10,8 @@ ALTER PROCEDURE [dbo].[GetNewfeeds]
 @SearchText nvarchar(100),
 @SortBy int,
 @NewsfeedCountFrom int,
-@GetTotalNewsfeeds int
+@GetTotalNewsfeeds int,
+@IsDateIncluded bit
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -18,27 +19,53 @@ BEGIN
 	begin
 	if (@SearchText = '')
 		begin
-		select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
-			n.Comment_by_Reviewer, p.Display_Name , n.Title
-		from Newsfeed n, Publisher p
-		where n.Publisher_Id = p.Publisher_Id
-		and n.IsDeleted = 0	
-		and n.IsVerified = 1
-		and n.IsVerified = 1
-			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
-			end
-			else 
+			if(@IsDateIncluded = 0)
+				begin
+					select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+					n.Comment_by_Reviewer, p.Display_Name , n.Title
+					from Newsfeed n, Publisher p
+					where n.Publisher_Id = p.Publisher_Id	
+					and n.IsDeleted = 0	
+					and n.IsVerified = 1
+					and n.IsVerified = 1
+				end
+				else
+				begin
+					select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+					n.Comment_by_Reviewer, p.Display_Name , n.Title
+					from Newsfeed n, Publisher p
+					where n.Publisher_Id = p.Publisher_Id
+					and n.IsDeleted = 0	
+					and n.IsVerified = 1
+					and n.IsVerified = 1
+					and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+				end
+		end
+		else 
+		begin
+			if(@IsDateIncluded = 0)
 			begin
-		select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
-			n.Comment_by_Reviewer, p.Display_Name , n.Title
-		from Newsfeed n, Publisher p
-		where n.Publisher_Id = p.Publisher_Id
-		and n.IsDeleted = 0	
-		and n.IsVerified = 1
-		and n.IsVerified = 1
-			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
-			and n.Content like '%'+@SearchText+'%'
+				select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name , n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
 			end
+			else
+			begin
+				select Top(3)n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name , n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
+				and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+				and n.Content like '%'+@SearchText+'%'
+			end
+		end
 	end
 	else
 	begin
@@ -46,33 +73,65 @@ BEGIN
 
 		if (@SearchText = '')
 		begin
-			select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
-			n.Comment_by_Reviewer, p.Display_Name, n.Title
-			from Newsfeed n, Publisher p
-			where n.Publisher_Id = p.Publisher_Id
-			and n.IsDeleted = 0	
-			and n.IsVerified = 1
-			and n.IsVerified = 1
-			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
-			Order by n.Datetime desc
-			OFFSET @NewsfeedCountFrom ROWS
-			FETCH NEXT @GetTotalNewsfeeds ROWS ONLY		 
+			if(@IsDateIncluded = 0)
+			begin
+				select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name, n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
+				Order by n.Datetime desc
+				OFFSET @NewsfeedCountFrom ROWS
+				FETCH NEXT @GetTotalNewsfeeds ROWS ONLY		 
+			end
+			else
+			begin
+				select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name, n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
+				and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+				Order by n.Datetime desc
+				OFFSET @NewsfeedCountFrom ROWS
+				FETCH NEXT @GetTotalNewsfeeds ROWS ONLY
+			end
 		end
 		else
 		begin
-			select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
-			n.Comment_by_Reviewer, p.Display_Name, n.Title
-			from Newsfeed n, Publisher p
-			where n.Publisher_Id = p.Publisher_Id
-			and n.IsDeleted = 0	
-			and n.IsVerified = 1
-			and n.IsVerified = 1
-			and convert(date, n.Datetime) = convert(date,@SearchDateTime)
-			and n.Content like '%'+@SearchText+'%'
-			Order by n.Datetime desc
-			OFFSET @NewsfeedCountFrom ROWS
-			FETCH NEXT @GetTotalNewsfeeds ROWS ONLY
+			if(@IsDateIncluded = 0)
+			begin
+				select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name, n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
+				and n.Content like '%'+@SearchText+'%'
+				Order by n.Datetime desc
+				OFFSET @NewsfeedCountFrom ROWS
+				FETCH NEXT @GetTotalNewsfeeds ROWS ONLY
+			end
+			else
+			begin
+				select n.Content, n.NewsFeed_Id, n.Datetime, n.Publisher_Id, n.Image_Path, n.IsPublished, n.IsDeleted, n.IsVerified,
+				n.Comment_by_Reviewer, p.Display_Name, n.Title
+				from Newsfeed n, Publisher p
+				where n.Publisher_Id = p.Publisher_Id
+				and n.IsDeleted = 0	
+				and n.IsVerified = 1
+				and n.IsVerified = 1
+				and convert(date, n.Datetime) = convert(date,@SearchDateTime)
+				and n.Content like '%'+@SearchText+'%'
+				Order by n.Datetime desc
+				OFFSET @NewsfeedCountFrom ROWS
+				FETCH NEXT @GetTotalNewsfeeds ROWS ONLY
+			end
 		end
-
 	end
 END

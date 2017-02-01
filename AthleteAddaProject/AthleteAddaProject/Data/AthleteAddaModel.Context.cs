@@ -30,7 +30,7 @@ namespace AthleteAddaProject.Data
         public virtual DbSet<Newsfeed> Newsfeeds { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
     
-        public virtual ObjectResult<GetNewfeeds_Result> GetNewfeeds(Nullable<System.DateTime> searchDateTime, string searchText, Nullable<int> sortBy, Nullable<int> newsfeedCountFrom, Nullable<int> getTotalNewsfeeds)
+        public virtual ObjectResult<GetNewfeeds_Result> GetNewfeeds(Nullable<System.DateTime> searchDateTime, string searchText, Nullable<int> sortBy, Nullable<int> newsfeedCountFrom, Nullable<int> getTotalNewsfeeds, Nullable<bool> isDateIncluded)
         {
             var searchDateTimeParameter = searchDateTime.HasValue ?
                 new ObjectParameter("SearchDateTime", searchDateTime) :
@@ -52,7 +52,11 @@ namespace AthleteAddaProject.Data
                 new ObjectParameter("GetTotalNewsfeeds", getTotalNewsfeeds) :
                 new ObjectParameter("GetTotalNewsfeeds", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNewfeeds_Result>("GetNewfeeds", searchDateTimeParameter, searchTextParameter, sortByParameter, newsfeedCountFromParameter, getTotalNewsfeedsParameter);
+            var isDateIncludedParameter = isDateIncluded.HasValue ?
+                new ObjectParameter("IsDateIncluded", isDateIncluded) :
+                new ObjectParameter("IsDateIncluded", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetNewfeeds_Result>("GetNewfeeds", searchDateTimeParameter, searchTextParameter, sortByParameter, newsfeedCountFromParameter, getTotalNewsfeedsParameter, isDateIncludedParameter);
         }
     }
 }

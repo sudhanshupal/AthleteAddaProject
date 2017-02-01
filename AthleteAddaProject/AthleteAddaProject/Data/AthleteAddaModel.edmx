@@ -37,6 +37,7 @@
           <Parameter Name="SortBy" Type="int" Mode="In" />
           <Parameter Name="NewsfeedCountFrom" Type="int" Mode="In" />
           <Parameter Name="GetTotalNewsfeeds" Type="int" Mode="In" />
+          <Parameter Name="IsDateIncluded" Type="bit" Mode="In" />
         </Function>
         <EntityContainer Name="AthleteAddaTestModelStoreContainer">
           <EntitySet Name="Newsfeed" EntityType="Self.Newsfeed" Schema="dbo" store:Type="Tables" />
@@ -81,6 +82,7 @@
             <Parameter Name="SortBy" Mode="In" Type="Int32" />
             <Parameter Name="NewsfeedCountFrom" Mode="In" Type="Int32" />
             <Parameter Name="GetTotalNewsfeeds" Mode="In" Type="Int32" />
+            <Parameter Name="IsDateIncluded" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetNewfeeds_Result">

@@ -36,7 +36,7 @@ namespace AthleteAddaProject.Service
             return newsFeedList;
         }
 
-        public List<NewsfeedModel> GetAllNewsFeeds(DateTime searchDateTime, string searchStr, int sortBy, int newsfeedCountFrom, int getTotalNewsfeeds)
+        public List<NewsfeedModel> GetAllNewsFeeds(DateTime searchDateTime, string searchStr, int sortBy, int newsfeedCountFrom, int getTotalNewsfeeds, bool isDateIncluded)
         {
             List<NewsfeedModel> newsFeedList = new List<NewsfeedModel>();
             using (AthleteAddaTestEntities db = new AthleteAddaTestEntities())
@@ -44,7 +44,7 @@ namespace AthleteAddaProject.Service
                 if (searchStr == null)
                     searchStr = "";
 
-                var newsFeeds = db.GetNewfeeds(searchDateTime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds).ToList();
+                var newsFeeds = db.GetNewfeeds(searchDateTime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds, isDateIncluded).ToList();
                 if (newsFeeds.Any())
                 {
                     foreach (var news in newsFeeds)

@@ -35,6 +35,7 @@
       <Parameter Name="SortBy" Mode="In" Type="Int32" />
       <Parameter Name="NewsfeedCountFrom" Mode="In" Type="Int32" />
       <Parameter Name="GetTotalNewsfeeds" Mode="In" Type="Int32" />
+      <Parameter Name="IsDateIncluded" Mode="In" Type="Boolean" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="GetNewfeeds_Result">

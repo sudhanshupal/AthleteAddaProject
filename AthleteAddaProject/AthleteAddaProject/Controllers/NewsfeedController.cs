@@ -14,12 +14,19 @@ namespace AthleteAddaProject.Controllers
 
         public IHttpActionResult Get(string datetimeStr, string searchStr, int newsfeedCountFrom)
         {
+            bool isDateIncluded = false;
             //newsfeedCountFrom = 6;
-            DateTime datetime = DateTime.Parse(datetimeStr);
+            DateTime datetime = DateTime.Today;
+            if (datetimeStr != null)
+            {
+                isDateIncluded = true;
+                datetime = DateTime.Parse(datetimeStr);
+            }
+
             int sortBy = 0;
             int getTotalNewsfeeds = 3;
             NewsFeedService newsFeedService = new NewsFeedService();
-            List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds(datetime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds);
+            List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds(datetime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds, isDateIncluded);
             return Ok(newsfeeds);
         }
 
