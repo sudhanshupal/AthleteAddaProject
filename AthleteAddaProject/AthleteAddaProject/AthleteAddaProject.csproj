@@ -212,6 +212,7 @@
     <Compile Include="Models\NewsfeedModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\NewsFeedService.cs" />
+    <Compile Include="Service\UploadService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +295,7 @@
     <Content Include="Content\date-picker\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Content\date-picker\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Content\date-picker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Content\dropzone.css" />
     <Content Include="Content\Images\athleteadda2.jpg" />
     <Content Include="Content\Images\athleteadda3.jpg" />
     <Content Include="Content\Images\athleteaddaLogo.jpg" />
@@ -329,6 +331,7 @@
     <Content Include="Content\date-picker\css\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\date-picker\css\bootstrap-datepicker3.standalone.min.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Content\dropzone.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

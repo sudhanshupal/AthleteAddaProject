@@ -1,32 +1,115 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "AddNews";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>AddNews</h2>
+<link href="~/Content/dropzone.css" rel="stylesheet" />
+<h2>Add News</h2>
 @Html.AntiForgeryToken()
 <div class="row">
     <div class="col-md-12">
-        <form class="form-horizontal">
+        <form class="form-horizontal" id="contentDragandDrop" onsubmit="return false">
             <div class="form-group">
-                <label class="control-label col-sm-offset-3 col-sm-2" for="email">Title:</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control" id="email" placeholder="Title">
+                <label class="control-label col-sm-offset-2 col-sm-2" for="txtTitle">Title:</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="txtTitle" placeholder="Enter Title" maxlength="500">
+                    <i><span id='remainingC' style="color:gray;"></span></i> 
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-offset-3 col-sm-2" for="pwd">Content:</label>
-                <div class="col-sm-5">
-                    <textarea  class="form-control" placeholder="Enter content" rows="10" ></textarea>
+                <label class="control-label col-sm-offset-2 col-sm-2" for="txtContent">Content:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" placeholder="Enter content" id="txtContent" rows="10" maxlength="2500"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-2">
+                    <div class="dropzone" id="mydropzone">
+                        <div class="fallback">
+                            <input name="file" type="file" />
+                        </div>
+                    </div>
                 </div>
             </div>
             @*todo:google capcha here*@
             <div class="form-group">
-                <div class="col-sm-offset-5 col-sm-5">
-                    <button type="submit" class="btn btn-default">Submit</button>
+                <div class="col-sm-offset-4 col-sm-6">
+                    <button id="submit" type="submit" class="btn btn-default">Submit</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+
+@section scripts{
+
+    <script src="~/Content/dropzone.js"></script>
+    <script>
+        $(function () {
+            var text_max = 500;
+            $('#remainingC').html(text_max + ' characters remaining');
+
+            $('#txtTitle').keyup(function (e) {
+                var text_length = $('#txtTitle').val().length;
+                if (text_length == text_max)
+                {
+                    e.preventDefault();
+                }
+                var text_remaining = text_max - text_length;
+
+                $('#remainingC').html(text_remaining + ' characters remaining');
+            });
+            // Prevents from submitting the forms to the server as soon as they are selected.
+            // Adds all the files to the queue.
+            Dropzone.autoDiscover = false;
+            if ($('#mydropzone').length) {
+                var myDropzone = new Dropzone("#mydropzone", {
+                    autoProcessQueue: false,
+                    url: "../api/Newsfeed/PostNewsFeed",
+                    acceptedFiles: "image/jpeg,image/png,image/gif",
+                    dictDefaultMessage: "Drop image here..",
+                    uploadMultiple: false,
+                    maxFiles: 1, //1 mb size
+                    maxfilesexceeded: function (file) {
+                        this.removeAllFiles();
+                        this.addFile(file);
+                    }
+                });
+
+                // On submit button all the files are sent to the server.
+
+                $("#submit").on("click", function () {
+                    if ($('#txtTitle').val().length > 0 && $('#txtContent').val().length > 0 ) {
+                        myDropzone.processQueue();
+                    }
+                    else {
+                        alert("All fields are required.");
+                    }
+                });
+
+                myDropzone.on("sending", function (file, xhr, formData) {
+                    formData.append("Title", $('#txtTitle').val());             // Appeding the data to the request and sending it along with the file.
+                    formData.append("Content", $('#txtContent').val());
+                });
+                myDropzone.on("success", function (file, xhr, formData) {
+                    //success only
+                });
+                myDropzone.on("complete", function (file, xhr, formData) {
+                    //upload call complete. show error or success
+                    if (file.status == "success") {
+                        alert('News uploaded successfully.');
+                        myDropzone.removeAllFiles();
+                        $('#txtTitle').val('');
+                        $('#txtContent').val('');
+                    }
+                    else {
+                        this.removeAllFiles();
+                        alert('Error occurred during News upload.');
+
+                    }
+                });
+
+            }
+        });
+    </script>
+}

@@ -6,6 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using AthleteAddaProject.Service;
 using AthleteAddaProject.Models;
+using System.Globalization;
+using System.IO;
+using System.Configuration;
+using System.Web;
 
 namespace AthleteAddaProject.Controllers
 {
@@ -19,6 +23,12 @@ namespace AthleteAddaProject.Controllers
             DateTime datetime = DateTime.Today;
             if (datetimeStr != null)
             {
+                DateTime output;
+                if (!DateTime.TryParseExact(datetimeStr, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out output))
+                {
+                    // Uh oh again...
+                    return BadRequest("Date is not valid. Please enter valid date format for ex-yyyy/mm/dd.");
+                }
                 isDateIncluded = true;
                 datetime = DateTime.Parse(datetimeStr);
             }
@@ -33,22 +43,55 @@ namespace AthleteAddaProject.Controllers
         [HttpPost]
         [Route("api/Newsfeed/PostNewsFeed")]
         //todo:if antiforgerytoken are not working comment it. AntiForgeryToken is compulsary for the POST.
-        [AthleteAddaProject.Common.ValidateJsonAntiForgeryTokenAttribute]
-        public IHttpActionResult PostNewsFeed(NewsfeedModel model)
+        //[AthleteAddaProject.Common.ValidateJsonAntiForgeryTokenAttribute]
+        public IHttpActionResult PostNewsFeed()
         {
             try
             {
-                if(true)
+                var postedFile = HttpContext.Current.Request.Files.Count > 0 ?
+                                        HttpContext.Current.Request.Files[0] : null;
+
+                if (postedFile != null && postedFile.ContentLength > 0 && postedFile.ContentLength <= 10485760 && HttpContext.Current.Request.Form.Count == 2)
                 {
-                    //...
-                    //todo:add data using service here
-                    return Created("api/Newsfeed/Get", model);//if create response not working then try OK() just like Get() above.
+                    HttpPostedFileBase file = new HttpPostedFileWrapper(postedFile);//as HttpPostedFileBase;
+                    var newsFeedService = new NewsFeedService();
+                    var fileUploadService = new UploadService();
+
+                    var fileName = System.IO.Path.GetFileName(file.FileName);
+                    string uploadedFileName = file.FileName;
+                    string extension = file.FileName.Substring(uploadedFileName.LastIndexOf("."));
+                    string saveAsFileName = file.FileName.Split('.')[0] + "_" + Guid.NewGuid().ToString() + extension;
+                    string saveAsPath = System.Web.HttpContext.Current.Server.MapPath("~\\" + ConfigurationSettings.AppSettings["ImageLocation"].ToString() + "\\" + Path.GetFileName(saveAsFileName));
+                    string saveToPath = "../" + ConfigurationSettings.AppSettings["ImageLocation"].ToString() + "/" + Path.GetFileName(saveAsFileName);
+                    //create folder if not exists
+                    fileUploadService.CreateFolderIfNotExists(System.Web.HttpContext.Current.Server.MapPath("~\\" + ConfigurationManager.AppSettings["ImageLocation"].ToString() + "\\"));
+
+                    // Fetching the data that has been sent along with the form. 
+                    var title = System.Web.HttpContext.Current.Request.Form["Title"];
+                    var content = System.Web.HttpContext.Current.Request.Form["Content"];
+                    if (title.ToString() == "" || content.ToString() == "")
+                    {
+                        return BadRequest("Please enter all fields.");
+                    }
+                    else if (title.Length > 500)
+                    {
+                        return BadRequest("Title must be less that 500 characters.");
+                    }
+
+                    string[] allowedFileExtentions = new string[] { ".jpeg", ".jpg", ".png", ".gif" };
+                    fileUploadService.UploadFile(file, saveAsPath, allowedFileExtentions, Convert.ToInt32(ConfigurationManager.AppSettings["UploadFileSizeForImage"]));
+                    newsFeedService.SaveNews(saveToPath, title, content);
+                    return Ok();
                 }
                 else
                 {
                     return BadRequest("Invalid attempt to save news. Please try again later.");
                 }
-
+            }
+            catch (ApplicationException ex)
+            {
+                //todo:log
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

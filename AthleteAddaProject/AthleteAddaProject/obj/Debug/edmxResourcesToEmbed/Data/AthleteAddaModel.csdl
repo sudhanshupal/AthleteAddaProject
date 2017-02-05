@@ -8,7 +8,7 @@
     <Property Name="Datetime" Type="DateTime" Precision="3" />
     <Property Name="Publisher_Id" Type="Int32" />
     <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Image_Path" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Image_Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="IsPublished" Type="Boolean" />
     <Property Name="IsDeleted" Type="Boolean" />
     <Property Name="IsVerified" Type="Boolean" />

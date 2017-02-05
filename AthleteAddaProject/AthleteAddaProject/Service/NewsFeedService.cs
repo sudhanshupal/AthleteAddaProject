@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using AthleteAddaProject.Data;
 using AthleteAddaProject.Models;
+using System.IO;
 
 namespace AthleteAddaProject.Service
 {
@@ -68,6 +69,31 @@ namespace AthleteAddaProject.Service
    
             }
             return newsFeedList;
+        }
+
+        /// <summary>
+        /// save news
+        /// </summary>
+        /// <param name="imageLink"></param>
+        /// <param name="title"></param>
+        /// /// <param name="content"></param>
+        public void SaveNews(string imageLink, string title, string content)
+        {
+            using (AthleteAddaTestEntities db = new AthleteAddaTestEntities())
+            {
+                Newsfeed news = new Newsfeed();
+                news.Content = content;
+                news.Title = title;
+                news.Image_Path = imageLink;
+                news.Comment_by_Reviewer = "Verified";
+                news.Datetime = DateTime.Now;
+                news.IsDeleted = false;
+                news.IsPublished = true;
+                news.IsVerified = true;
+                news.Publisher_Id = 1001;
+                db.Newsfeeds.Add(news);
+                db.SaveChanges();
+            }
         }
     }
 }

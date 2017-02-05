@@ -191,11 +191,18 @@
                         //if no data available then disable the next button
                         DisableNextButton();
                         $('#noResultFoundMessage').show();
-
+                        $("#NewsTable").empty();
                     }
                 },
                 error: function (msg) {
-                    $('#spanMessage').text(msg);
+                    if (msg != null && msg.responseJSON != null && msg.responseJSON.Message != "")
+                    {
+                        $('#spanMessage').text(msg.responseJSON.Message);
+                    }
+                    else
+                    {
+                        $('#spanMessage').text("Internal Server Error.");
+                    }
                     $('#errorMessage').show();
                 }
             });
