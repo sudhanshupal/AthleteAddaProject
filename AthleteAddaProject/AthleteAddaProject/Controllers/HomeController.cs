@@ -18,8 +18,12 @@ namespace AthleteAddaProject.Controllers
         public ActionResult AddNews()
         {
             ViewBag.Message = "Your application description page.";
-
-            return View();
+            if (User.IsInRole("Publisher") || User.IsInRole("SuperAdmin"))
+            {
+                return View();
+            }
+            else
+                return View("Index");
         }
 
         public ActionResult About()

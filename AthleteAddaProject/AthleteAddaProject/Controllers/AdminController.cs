@@ -13,35 +13,12 @@ using System.Web;
 
 namespace AthleteAddaProject.Controllers
 {
-    public class NewsfeedController : ApiController
+    [Authorize]
+    public class AdminController : ApiController
     {
 
-        public IHttpActionResult Get(string datetimeStr, string searchStr, int newsfeedCountFrom)
-        {
-            bool isDateIncluded = false;
-            //newsfeedCountFrom = 6;
-            DateTime datetime = DateTime.Today;
-            if (datetimeStr != null)
-            {
-                DateTime output;
-                if (!DateTime.TryParseExact(datetimeStr, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out output))
-                {
-                    // Uh oh again...
-                    return BadRequest("Date is not valid. Please enter valid date format for ex-yyyy/mm/dd.");
-                }
-                isDateIncluded = true;
-                datetime = DateTime.Parse(datetimeStr);
-            }
-
-            int sortBy = 0;
-            int getTotalNewsfeeds = 3;
-            NewsFeedService newsFeedService = new NewsFeedService();
-            List<NewsfeedModel> newsfeeds = newsFeedService.GetAllNewsFeeds(datetime, searchStr, sortBy, newsfeedCountFrom, getTotalNewsfeeds, isDateIncluded);
-            return Ok(newsfeeds);
-        }
-
         [HttpPost]
-        [Route("api/Newsfeed/PostNewsFeed")]
+        [Route("api/Admin/PostNewsFeed")]
         //todo:if antiforgerytoken are not working comment it. AntiForgeryToken is compulsary for the POST.
         [AthleteAddaProject.Common.ValidateJsonAntiForgeryTokenAttribute]
         public IHttpActionResult PostNewsFeed()
@@ -98,32 +75,6 @@ namespace AthleteAddaProject.Controllers
                 //todo:log
                 return InternalServerError(ex);
             }
-        }
-        // GET api/<controller>
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

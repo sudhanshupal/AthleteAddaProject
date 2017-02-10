@@ -120,3 +120,5 @@ D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaPro
 D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaProject\obj\Debug\AthleteAddaProject.csprojResolveAssemblyReference.cache
 D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaProject\obj\Debug\AthleteAddaProject.dll
 D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaProject\obj\Debug\AthleteAddaProject.pdb
+D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaProject\obj\Debug\AthleteAddaProject.Migrations.InitialCreate.resources
+D:\data\AthleteAdda\GitRepo\AthleteAddaProject\AthleteAddaProject\AthleteAddaProject\obj\Debug\AthleteAddaProject.csproj.GenerateResource.Cache

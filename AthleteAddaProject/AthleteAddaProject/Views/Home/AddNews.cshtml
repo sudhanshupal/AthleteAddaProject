@@ -45,9 +45,15 @@
 
     <script src="~/Content/dropzone.js"></script>
     <script>
+        function getAntiForgeryToken() {
+            return $("input[name='__RequestVerificationToken']").val();
+        }
+
+
         $(function () {
             var text_max = 500;
             $('#remainingC').html(text_max + ' characters remaining');
+            var token = getAntiForgeryToken();
 
             $('#txtTitle').keyup(function (e) {
                 var text_length = $('#txtTitle').val().length;
@@ -65,7 +71,7 @@
             if ($('#mydropzone').length) {
                 var myDropzone = new Dropzone("#mydropzone", {
                     autoProcessQueue: false,
-                    url: "../api/Newsfeed/PostNewsFeed",
+                    url: "../api/Admin/PostNewsFeed",
                     acceptedFiles: "image/jpeg,image/png,image/gif",
                     dictDefaultMessage: "Drop image here..",
                     uploadMultiple: false,
@@ -73,6 +79,9 @@
                     maxfilesexceeded: function (file) {
                         this.removeAllFiles();
                         this.addFile(file);
+                    },
+                    headers: {
+                        '__RequestVerificationToken': token,
                     }
                 });
 
